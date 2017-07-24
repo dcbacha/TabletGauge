@@ -366,7 +366,7 @@ public class AccelGauge implements IGauge, SensorEventListener {
         switch (mGaugeMode) {
             case GAUGE_MODE_SPEED:
 
-                mIGaugeUI.setPointerValue(mSpeed);
+                mIGaugeUI.setPointerValue(mSpeed/10);
 
                 if (mDisplayRequiresUpdate)
                     updateDisplayValue(mAveSpeed);
