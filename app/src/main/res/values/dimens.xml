@@ -16,8 +16,35 @@
     <dimen name="gauge_button_height">58.33dp</dimen>
     <dimen name="gauge_button_bottom_margin">33.33dp</dimen>
     <dimen name="gauge_button_left_margin">0dp</dimen>
+
     <dimen name="connection_icon_width">18dp</dimen>
     <dimen name="connection_icon_height">18dp</dimen>
     <dimen name="connection_icon_left_margin">20dp</dimen>
     <dimen name="connection_icon_bottom_margin">40dp</dimen>
+
+    <dimen name="amount_text_size2">40sp</dimen>
+    <dimen name="units_text_size2">15sp</dimen>
+    <dimen name="units_margin_left2">5sp</dimen>
+    <dimen name="pointer_top_margin2">84dp</dimen>
+    <dimen name="pointer_height2">20dp</dimen> //**
+    <dimen name="pointer_y_position2">100dp</dimen>
+    <dimen name="gauge_size2">500dp</dimen>
+    <dimen name="amount_container_padding_right2">10dp</dimen>
+    <dimen name="amount_container_margin_top2">220dp</dimen>
+    <dimen name="amount_container_margin_bottom2">8dp</dimen>
+    <dimen name="measurement_top_label_text_size2">12sp</dimen>
+    <dimen name="measurement_bottom_label_text_size2">14sp</dimen>
+    <dimen name="segment_margin2">20dp</dimen>
+    <dimen name="gauge_button_width2">130dp</dimen>
+    <dimen name="gauge_button_height2">45dp</dimen>
+    <dimen name="gauge_button_bottom_margin2">35dp</dimen> //**
+    <dimen name="gauge_button_left_margin2">0dp</dimen>
+
+    <dimen name="connection_icon_width2">18dp</dimen>
+    <dimen name="connection_icon_height2">18dp</dimen>
+    <dimen name="connection_icon_left_margin2">20dp</dimen>
+    <dimen name="connection_icon_bottom_margin2">40dp</dimen>
+
+
+
 </resources>

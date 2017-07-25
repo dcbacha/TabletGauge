@@ -170,7 +170,7 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
 
     @Override
     public void setConnected(boolean connected) {
-        mConnected = connected;
+       // mConnected = connected;
 
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {

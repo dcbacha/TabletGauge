@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.ViewTreeObserver;
 
 import com.nike.accel.bo.AccelGauge;
+import com.nike.accel.bo.AccelGauge_Battery;
 import com.nike.accel.data.web.IWebAccess;
 import com.nike.accel.data.web.pubnub.PubNubWeb;
 import com.nike.accel.ui.widgets.gauges.IGaugeData;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     public MultiColoredScaleGauge_Rpm mGauge2;
     private PubNubWeb mPubNubWeb2;
 
-    public AccelGauge mAccelGauge3;
+    public AccelGauge_Battery mAccelGauge3;
     public MultiColoredScaleGauge_Battery mGauge3;
     private PubNubWeb mPubNubWeb3;
 
@@ -46,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 mGauge.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mPubNubWeb = new PubNubWeb(new IWebAccess() {
+             /*   mPubNubWeb = new PubNubWeb(new IWebAccess() {
                     @Override
                     public void onConnectionChange(boolean connected) {
                         if (mGauge != null)
                             mGauge.setConnected(connected);
                     }
-                });
+                });*/
 
                 mAccelGauge = new AccelGauge(mGauge, new IGaugeData() {
                     @Override
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                mAccelGauge3 = new AccelGauge(mGauge3, new IGaugeData() {
+                mAccelGauge3 = new AccelGauge_Battery(mGauge3, new IGaugeData() {
                     @Override
                     public void dataAvailable(float speed, float aveSpeed, float currentDistance, float totalDistance) {
                         // Send gauge data to PubNub.

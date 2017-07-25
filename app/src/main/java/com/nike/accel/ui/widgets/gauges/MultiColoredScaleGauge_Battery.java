@@ -39,12 +39,12 @@ public class MultiColoredScaleGauge_Battery extends LinearLayout implements IGau
 
     public MultiColoredScaleGauge_Battery(Context context) {
         super(context);
-        this.mContext = context;
+        mContext = context; //talvez trocar esse aqui
     }
 
     public MultiColoredScaleGauge_Battery(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mContext = context;
+        mContext = context;
     }
 
     private void initialize(Context context) {
@@ -54,13 +54,13 @@ public class MultiColoredScaleGauge_Battery extends LinearLayout implements IGau
         final View vRoot = inflater.inflate(R.layout.gauge_multi_colored_scale_battery, null, false);
 
 
-        mTextView7SegmentLabel = (TextView) vRoot.findViewById(R.id.tv_7_segment_label);
-        mTextViewTopLabel = (TextView) vRoot.findViewById(R.id.tv_top_label);
-        mTextViewBottomLabel = (TextView) vRoot.findViewById(R.id.tv_bottom_label);
+        mTextView7SegmentLabel = (TextView) vRoot.findViewById(R.id.tv_7_segment_label3);
+        mTextViewTopLabel = (TextView) vRoot.findViewById(R.id.tv_top_label3);
+        mTextViewBottomLabel = (TextView) vRoot.findViewById(R.id.tv_bottom_label3);
 
         // Load the 7 segment font.
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/dseg7modern_regular.ttf");
-        mTextView7SegmentValue = (TextView) vRoot.findViewById(R.id.tv_7_segment_value);
+        mTextView7SegmentValue = (TextView) vRoot.findViewById(R.id.tv_7_segment_value3);
         mTextView7SegmentValue.setTypeface(font);
 
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -68,16 +68,16 @@ public class MultiColoredScaleGauge_Battery extends LinearLayout implements IGau
         addView(vRoot);
 
         // Preload any views that will require updating during runtime.
-        mImageViewGauge = (ImageView) vRoot.findViewById(R.id.iv_gauge);
+        mImageViewGauge = (ImageView) vRoot.findViewById(R.id.iv_gauge3);
         mImageViewGauge.setDrawingCacheEnabled(true);
 
-        mImageViewScaleBg = (ImageView) vRoot.findViewById(R.id.iv_scale_bg);
+        mImageViewScaleBg = (ImageView) vRoot.findViewById(R.id.iv_scale_bg3);
         mImageViewScaleBg.setDrawingCacheEnabled(true);
 
-        mImageViewPointer = (ImageView) vRoot.findViewById(R.id.iv_pointer);
+        mImageViewPointer = (ImageView) vRoot.findViewById(R.id.iv_pointer3);
        // mImageViewConnection = (ImageView) vRoot.findViewById(R.id.iv_connection);
 
-        final ImageView iv_button = (ImageView) vRoot.findViewById(R.id.iv_button);
+        final ImageView iv_button = (ImageView) vRoot.findViewById(R.id.iv_button3);
 
         vRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -126,7 +126,7 @@ public class MultiColoredScaleGauge_Battery extends LinearLayout implements IGau
      */
     @Override
     public void setPointerValue(final float value) {
-        ((Activity) mContext).runOnUiThread(new Runnable() {
+        ((Activity) mContext).runOnUiThread(new Runnable() { // sepa trocar esse activity por context
             public void run() {
                 // Calculate the angle that corresponds to the value.
                 float angle = 30 * value + 210;
