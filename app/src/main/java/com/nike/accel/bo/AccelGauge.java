@@ -447,6 +447,7 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
                 break;
             case GAUGE_MODE_GPS:
                 updateSpeedGPS(mLocation);
+                Log.i(TAG, String.valueOf(mLocation));
                 break;
 
             case GAUGE_MODE_DEMO:
@@ -554,7 +555,7 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
         if(location != null)
         {
             //location.setUseMetricunits(this.useMetricUnits());
-            nCurrentSpeed = location.getSpeed()*3.6f;
+            nCurrentSpeed = location.getSpeed();
         }
 
         Formatter fmt = new Formatter(new StringBuilder());
@@ -562,13 +563,15 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
+        Log.i(TAG, strCurrentSpeed);
+
         //String strUnits = "meters/second";
 
         //TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
         //txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
 
-        setGaugePointerValue(Float.parseFloat(strCurrentSpeed)*3.6f);
-        updateDisplayValue(Float.parseFloat(strCurrentSpeed)*3.6f);
+        setGaugePointerValue(Float.parseFloat(strCurrentSpeed));
+        updateDisplayValue(Float.parseFloat(strCurrentSpeed));
     }
 
     //Methods do IBaseGPSLinseter
