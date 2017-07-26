@@ -12,7 +12,7 @@ import com.nike.accel.R;
 /**
  * Draws the gradient scale on the gauge.
  */
-public class GradientScale_Rpm extends ImageView {
+public class GradientScale_Current_Positive extends ImageView {
     private Paint mPaintBg;
     private float mAngle;
 
@@ -24,15 +24,15 @@ public class GradientScale_Rpm extends ImageView {
      * starts and yellow will overlap into the area where green starts. To get an exact
      * alignment, the sweep angles are adjusted.
      */
-    private final float RED_SWEEP_ANGLE = 48.1f;//29.6f;
+    private final float RED_SWEEP_ANGLE = 78.1f;//29.6f;
     private final float YELLOW_SWEEP_ANGLE = 90.2f;
 
-    public GradientScale_Rpm(Context context) {
+    public GradientScale_Current_Positive(Context context) {
         super(context);
         init();
     }
 
-    public GradientScale_Rpm(Context context, AttributeSet attrs) {
+    public GradientScale_Current_Positive(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -49,31 +49,18 @@ public class GradientScale_Rpm extends ImageView {
         float sweepAngle = mAngle > RED_SWEEP_ANGLE ? RED_SWEEP_ANGLE : mAngle;
         mPaintBg.setColor(getResources().getColor(R.color.mobilislightblue));
 
-        canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
+        canvas.drawArc(rect, startAngle, -sweepAngle, true, mPaintBg);
 
         if (mAngle <= RED_SWEEP_ANGLE)
             return;
 
         // Draw the yellow segments
-        startAngle = startAngle + sweepAngle;
+        startAngle = startAngle - sweepAngle;
         sweepAngle = mAngle - RED_SWEEP_ANGLE > YELLOW_SWEEP_ANGLE ? YELLOW_SWEEP_ANGLE : mAngle - RED_SWEEP_ANGLE;
-        mPaintBg.setColor(getResources().getColor(R.color.yellow_segments));
-
-        canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
-
-    /*    if (mAngle <= (RED_SWEEP_ANGLE + YELLOW_SWEEP_ANGLE))
-            return;
-
-        // Draw the green segments
-        startAngle = startAngle + sweepAngle;
-        sweepAngle = mAngle - (RED_SWEEP_ANGLE + YELLOW_SWEEP_ANGLE);
-
-        if (sweepAngle > 42)
-            sweepAngle = 42;
-
         mPaintBg.setColor(getResources().getColor(R.color.red_segments));
 
-        canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);*/
+        canvas.drawArc(rect, startAngle, -sweepAngle, true, mPaintBg);
+
     }
 
     public void setArcAngle(float angle) {

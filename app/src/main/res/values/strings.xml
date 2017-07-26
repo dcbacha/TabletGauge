@@ -5,7 +5,7 @@
     <string name="current">Current</string>
     <string name="total">Total</string>
     <string name="meters_abbrev"></string>
-    <string name="m_per_second"></string>
+    <string name="m_per_second">km/h</string>
     <string name="speed">Velocidade</string>
-    <string name="demo">Km/s</string>
+    <string name="demo">km/h</string>
 </resources>

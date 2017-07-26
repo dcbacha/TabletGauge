@@ -400,7 +400,7 @@ public class AccelGauge_Battery implements IGauge, SensorEventListener {
                 else
                     mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
 
-                setGaugePointerValue(mDemoSpeedValue/10);
+                setGaugePointerValue(mDemoSpeedValue);
                 updateDisplayValue(mDemoSpeedValue);
 
                 break;

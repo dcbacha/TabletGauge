@@ -57,7 +57,7 @@ public class GradientScale_Battery extends ImageView {
         // Draw the yellow segments
         startAngle = startAngle + sweepAngle;
         sweepAngle = mAngle - RED_SWEEP_ANGLE > YELLOW_SWEEP_ANGLE ? YELLOW_SWEEP_ANGLE : mAngle - RED_SWEEP_ANGLE;
-        mPaintBg.setColor(getResources().getColor(R.color.yellow_segments));
+        mPaintBg.setColor(getResources().getColor(R.color.mobilislightblue));
 
         canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
 

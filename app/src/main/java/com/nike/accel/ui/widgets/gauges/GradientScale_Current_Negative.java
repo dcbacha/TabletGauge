@@ -12,7 +12,7 @@ import com.nike.accel.R;
 /**
  * Draws the gradient scale on the gauge.
  */
-public class GradientScale_Rpm extends ImageView {
+public class GradientScale_Current_Negative extends ImageView {
     private Paint mPaintBg;
     private float mAngle;
 
@@ -27,12 +27,12 @@ public class GradientScale_Rpm extends ImageView {
     private final float RED_SWEEP_ANGLE = 48.1f;//29.6f;
     private final float YELLOW_SWEEP_ANGLE = 90.2f;
 
-    public GradientScale_Rpm(Context context) {
+    public GradientScale_Current_Negative(Context context) {
         super(context);
         init();
     }
 
-    public GradientScale_Rpm(Context context, AttributeSet attrs) {
+    public GradientScale_Current_Negative(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -61,19 +61,6 @@ public class GradientScale_Rpm extends ImageView {
 
         canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
 
-    /*    if (mAngle <= (RED_SWEEP_ANGLE + YELLOW_SWEEP_ANGLE))
-            return;
-
-        // Draw the green segments
-        startAngle = startAngle + sweepAngle;
-        sweepAngle = mAngle - (RED_SWEEP_ANGLE + YELLOW_SWEEP_ANGLE);
-
-        if (sweepAngle > 42)
-            sweepAngle = 42;
-
-        mPaintBg.setColor(getResources().getColor(R.color.red_segments));
-
-        canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);*/
     }
 
     public void setArcAngle(float angle) {

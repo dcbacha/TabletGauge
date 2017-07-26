@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -28,13 +29,20 @@ import com.nike.accel.ui.widgets.gauges.IGaugeUI;
  */
 public class AccelGauge implements IGauge, SensorEventListener {
     public static final int GAUGE_MODE_SPEED = 0;
-    public static final int GAUGE_MODE_CURRENT_DISTANCE = 1;
-    public static final int GAUGE_MODE_TOTAL_DISTANCE = 2;
-    public static final int GAUGE_MODE_DEMO = 3;
+  /*  public static final int GAUGE_MODE_CURRENT_DISTANCE = 1;
+    public static final int GAUGE_MODE_TOTAL_DISTANCE = 2;*/
+    public static final int GAUGE_MODE_DEMO = 1;
+    private static final String TAG = "AccelGauge";
 
-    private final int MAX_GAUGE_VALUE = 100;
+    private final int MAX_GAUGE_VALUE = 50;
+    private final int MAX_GAUGE_VALUE_BATTERY = 100;
+    private final int MAX_GAUGE_VALUE_CURRENT = 300;
+    private final int MIN_GAUGE_VALUE_CURRENT = -200;
+
     private final int SENSOR_READ_RATE = 10; // ms
     public static final int TEXT_UPDATE_INTERVAL = 500; // ms
+
+    private float CORRENTE = 0;
 
     private IGaugeUI mIGaugeUI;
     private IGaugeData mIGaugeData;
@@ -55,6 +63,7 @@ public class AccelGauge implements IGauge, SensorEventListener {
     private int mTotalAveSpeedPoints;
     private float mDemoSpeedValue;
     private boolean mDemoDecrement;
+    private boolean mCurrentDecrement;
     private boolean mIgnoreSensorData;
     private float mMaxSensorVal;
     private float mSpeed;
@@ -97,7 +106,8 @@ public class AccelGauge implements IGauge, SensorEventListener {
      */
     @Override
     public void onClick() {
-        mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_SPEED : ++mGaugeMode;
+        mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_SPEED : GAUGE_MODE_DEMO;
+        Log.i(TAG, String.valueOf(mGaugeMode));
         Preferences.saveGaugeMode(mGaugeMode, mContext);
         setDisplayMode();
     }
@@ -108,6 +118,8 @@ public class AccelGauge implements IGauge, SensorEventListener {
      */
     private void setDisplayMode() {
 
+        mIGaugeUI.set7SegmentLabel_Battery("%");
+
         switch (mGaugeMode) {
             case GAUGE_MODE_SPEED:
                 mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
@@ -116,7 +128,7 @@ public class AccelGauge implements IGauge, SensorEventListener {
 
                 break;
 
-            case GAUGE_MODE_CURRENT_DISTANCE:
+           /* case GAUGE_MODE_CURRENT_DISTANCE:
             case GAUGE_MODE_TOTAL_DISTANCE:
                 mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.meters_abbrev));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.distance));
@@ -125,10 +137,10 @@ public class AccelGauge implements IGauge, SensorEventListener {
                         mContext.getResources().getString(R.string.current) :
                         mContext.getResources().getString(R.string.total));
 
-                break;
+                break;*/
 
             case GAUGE_MODE_DEMO:
-               // mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
+                mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.demo));
                 mIGaugeUI.setMinorLabel("");
                 break;
@@ -260,6 +272,7 @@ public class AccelGauge implements IGauge, SensorEventListener {
      * @param data A 3 dimensional array containing acceleration data for each axis: x, y, z
      */
     public void processSensorData(float[] data) {
+        Log.i(TAG, String.valueOf(data));
         /*
          * For this demo, we won't calculate true speed because it involves removing the force of
          * gravity from the acceleration and this is a process that involves tweaking a formula
@@ -292,7 +305,7 @@ public class AccelGauge implements IGauge, SensorEventListener {
         // will show up on the gauge's needle. To prevent the needle from moving when no
         // real motion is applied, only record the speed when it exceeds a minimal threshold.
 
-        if (speed < .4)
+        if (speed < 2)
             speed = 0;
 
         if (speed > 0)
@@ -373,25 +386,41 @@ public class AccelGauge implements IGauge, SensorEventListener {
         mDisplayRequiresUpdate = false;
     }
 
+    private void updateDisplayValue_Current(float value) {
+        DecimalFormat df;
+
+        if (value < 1)
+            df = new DecimalFormat("0.0");
+        else
+            df = new DecimalFormat("###.0");
+
+        String text = df.format(value);
+        mIGaugeUI.set7SegmentDisplayValue_Current(text);
+
+        mTimeForLastDisplayUpdate = System.currentTimeMillis();
+        mDisplayRequiresUpdate = false;
+    }
+
     /**
      * Updates the gauge with data which includes the data on the 7 segment display as well
      * as the position of the pointer.
      */
     private void updateGauge() {
-        setGaugePointerValue_Battery(80/20);
-        updateDisplayValue_Battery(80);
+        updateGaugeBattery(90);
+        //updateGaugeCurrent(-100);
 
         switch (mGaugeMode) {
             case GAUGE_MODE_SPEED:
 
-                mIGaugeUI.setPointerValue(mSpeed/10);
+                mIGaugeUI.setPointerValue(mSpeed);
+                updateDisplayValue(mSpeed);
 
                 if (mDisplayRequiresUpdate)
                     updateDisplayValue(mAveSpeed);
 
                 break;
 
-            case GAUGE_MODE_CURRENT_DISTANCE:
+         /*   case GAUGE_MODE_CURRENT_DISTANCE:
             case GAUGE_MODE_TOTAL_DISTANCE:
 
                 if (mDisplayRequiresUpdate) {
@@ -404,10 +433,9 @@ public class AccelGauge implements IGauge, SensorEventListener {
                     }
                 }
 
-                break;
+                break;*/
 
             case GAUGE_MODE_DEMO:
-
 
 
                 if (!mDemoDecrement && (mDemoSpeedValue >= MAX_GAUGE_VALUE))
@@ -420,13 +448,33 @@ public class AccelGauge implements IGauge, SensorEventListener {
                 else
                     mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
 
-                setGaugePointerValue(mDemoSpeedValue/20);
-
+                setGaugePointerValue(mDemoSpeedValue);
                 updateDisplayValue(mDemoSpeedValue);
 
+                if (!mCurrentDecrement && (CORRENTE >= MAX_GAUGE_VALUE_CURRENT))
+                    mCurrentDecrement = true;
+                else if (mCurrentDecrement && (CORRENTE <= MIN_GAUGE_VALUE_CURRENT))
+                    mCurrentDecrement = false;
+
+                if(mCurrentDecrement)
+                    CORRENTE = CORRENTE - (100f / 150f);
+                else
+                    CORRENTE = CORRENTE + (100f / 150f);
+
+                updateGaugeCurrent(CORRENTE);
                 break;
 
         }
+    }
+
+    private void updateGaugeBattery(float value){
+        setGaugePointerValue_Battery(value);
+        updateDisplayValue_Battery(value);
+    }
+
+    private void updateGaugeCurrent(float value){
+        setGaugePointerValue_Current(value);
+        updateDisplayValue_Current(value);
     }
 
 
@@ -445,11 +493,22 @@ public class AccelGauge implements IGauge, SensorEventListener {
     }
 
     private void setGaugePointerValue_Battery(float value) {
-        if (value > MAX_GAUGE_VALUE) {
-            mIGaugeUI.setPointerValue_Battery(MAX_GAUGE_VALUE);
+        if (value > MAX_GAUGE_VALUE_BATTERY) {
+            mIGaugeUI.setPointerValue_Battery(MAX_GAUGE_VALUE_BATTERY);
         }
         else {
             mIGaugeUI.setPointerValue_Battery(value);
+        }
+    }
+
+    private void setGaugePointerValue_Current(float value) {
+        if (value > 0 && value > MAX_GAUGE_VALUE_CURRENT) {
+            mIGaugeUI.setPointerValue_Current(MAX_GAUGE_VALUE_CURRENT);
+        } else if(value <0 && value < MIN_GAUGE_VALUE_CURRENT){
+            mIGaugeUI.setPointerValue_Current(MIN_GAUGE_VALUE_CURRENT);
+        }
+        else {
+            mIGaugeUI.setPointerValue_Current(value);
         }
     }
 

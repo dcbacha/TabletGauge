@@ -6,13 +6,19 @@ package com.nike.accel.ui.widgets.gauges;
  */
 public interface IGaugeUI {
     void setPointerValue(float value);
-    void setPointerValue_Battery(float value);
     void set7SegmentDisplayValue(String value);
     void set7SegmentLabel(String text);
+
+    void setPointerValue_Battery(float value);
     void set7SegmentDisplayValue_Battery(String value);
     void set7SegmentLabel_Battery(String text);
+
+    void setPointerValue_Current(float value);
+    void set7SegmentDisplayValue_Current(String value);
+    void set7SegmentLabel_Current(String text);
+
     void setMinorLabel(String text);
     void setMajorLabel(String text);
     void setIGauge(IGauge iGauge);
-    void setConnected(boolean connected);
+  // void setConnected(boolean connected);
 }
