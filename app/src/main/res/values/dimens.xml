@@ -22,7 +22,7 @@
     <dimen name="connection_icon_left_margin">20dp</dimen>
     <dimen name="connection_icon_bottom_margin">40dp</dimen>
 
-    <dimen name="amount_text_size2">40sp</dimen>
+    <dimen name="amount_text_size2">24sp</dimen>
     <dimen name="units_text_size2">15sp</dimen>
     <dimen name="units_margin_left2">5sp</dimen>
     <dimen name="pointer_top_margin2">84dp</dimen>

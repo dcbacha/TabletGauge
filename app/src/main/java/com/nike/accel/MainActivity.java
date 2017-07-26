@@ -7,13 +7,9 @@ import android.view.Menu;
 import android.view.ViewTreeObserver;
 
 import com.nike.accel.bo.AccelGauge;
-import com.nike.accel.bo.AccelGauge_Battery;
-import com.nike.accel.data.web.IWebAccess;
 import com.nike.accel.data.web.pubnub.PubNubWeb;
 import com.nike.accel.ui.widgets.gauges.IGaugeData;
 import com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge;
-import com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge_Battery;
-import com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge_Rpm;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,14 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private PubNubWeb mPubNubWeb;
     private Context mContext;
 
-
-    public AccelGauge mAccelGauge2;
-    public MultiColoredScaleGauge_Rpm mGauge2;
-    private PubNubWeb mPubNubWeb2;
-
-    public AccelGauge_Battery mAccelGauge3;
-    public MultiColoredScaleGauge_Battery mGauge3;
-    private PubNubWeb mPubNubWeb3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,55 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mGauge2 = (MultiColoredScaleGauge_Rpm) findViewById(R.id.gauge2);
 
-        mGauge2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mGauge2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mPubNubWeb2 = new PubNubWeb(new IWebAccess() {
-                    @Override
-                    public void onConnectionChange(boolean connected) {
-                        if (mGauge2 != null)
-                            mGauge2.setConnected(connected);
-                    }
-                });
-
-                mAccelGauge2 = new AccelGauge(mGauge2, new IGaugeData() {
-                    @Override
-                    public void dataAvailable(float speed, float aveSpeed, float currentDistance, float totalDistance) {
-                        // Send gauge data to PubNub.
-                        if (mPubNubWeb2 != null)
-                            mPubNubWeb2.dataAvailable(speed, aveSpeed, currentDistance, totalDistance);
-                    }
-                }, mContext);
-            }
-        });
-
-        mGauge3 = (MultiColoredScaleGauge_Battery) findViewById(R.id.gauge3);
-
-        mGauge3.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mGauge3.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mPubNubWeb3 = new PubNubWeb(new IWebAccess() {
-                    @Override
-                    public void onConnectionChange(boolean connected) {
-                        if (mGauge3 != null)
-                            mGauge3.setConnected(connected);
-                    }
-                });
-
-                mAccelGauge3 = new AccelGauge_Battery(mGauge3, new IGaugeData() {
-                    @Override
-                    public void dataAvailable(float speed, float aveSpeed, float currentDistance, float totalDistance) {
-                        // Send gauge data to PubNub.
-                        if (mPubNubWeb3 != null)
-                            mPubNubWeb3.dataAvailable(speed, aveSpeed, currentDistance, totalDistance);
-                    }
-                }, mContext);
-            }
-        });
     }
 
     /**

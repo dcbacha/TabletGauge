@@ -26,11 +26,15 @@ import com.nike.accel.R;
 public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     private Context mContext;
     private ImageView mImageViewPointer;
+    private ImageView mImageViewPointer_battery;
     private ImageView mImageViewGauge;
     private ImageView mImageViewScaleBg;
+    private ImageView mImageViewScaleBg_battery;
   //  private ImageView mImageViewConnection;
     private TextView mTextView7SegmentValue;
     private TextView mTextView7SegmentLabel;
+    private TextView mTextView7SegmentValue_battery;
+    private TextView mTextView7SegmentLabel_battery;
     private TextView mTextViewTopLabel;
     private TextView mTextViewBottomLabel;
     private IGauge mIGauge;
@@ -55,6 +59,8 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
 
 
         mTextView7SegmentLabel = (TextView) vRoot.findViewById(R.id.tv_7_segment_label);
+
+        mTextView7SegmentLabel_battery = (TextView) vRoot.findViewById(R.id.tv_7_segment_label2);
         mTextViewTopLabel = (TextView) vRoot.findViewById(R.id.tv_top_label);
         mTextViewBottomLabel = (TextView) vRoot.findViewById(R.id.tv_bottom_label);
 
@@ -62,6 +68,9 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/dseg7modern_regular.ttf");
         mTextView7SegmentValue = (TextView) vRoot.findViewById(R.id.tv_7_segment_value);
         mTextView7SegmentValue.setTypeface(font);
+
+        mTextView7SegmentValue_battery = (TextView) vRoot.findViewById(R.id.tv_7_segment_value2);
+        mTextView7SegmentValue_battery.setTypeface(font);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         vRoot.setLayoutParams(layoutParams);
@@ -74,7 +83,11 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
         mImageViewScaleBg = (ImageView) vRoot.findViewById(R.id.iv_scale_bg);
         mImageViewScaleBg.setDrawingCacheEnabled(true);
 
+        mImageViewScaleBg_battery = (ImageView) vRoot.findViewById(R.id.iv_scale_bg2);
+        mImageViewScaleBg_battery.setDrawingCacheEnabled(true);
+
         mImageViewPointer = (ImageView) vRoot.findViewById(R.id.iv_pointer);
+        mImageViewPointer_battery = (ImageView) vRoot.findViewById(R.id.iv_pointer2);
        // mImageViewConnection = (ImageView) vRoot.findViewById(R.id.iv_connection);
 
         final ImageView iv_button = (ImageView) vRoot.findViewById(R.id.iv_button);
@@ -87,17 +100,12 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
                 float xCenter = getWidth() / 2;
                 float yCenter = getHeight() / 2;
 
-                mImageViewPointer.setX(xCenter - (mImageViewPointer.getWidth() / 2));
-                mImageViewPointer.setY(yCenter - getResources().getDimension(R.dimen.pointer_y_position));
-
                 mImageViewPointer.setPivotX(mImageViewPointer.getWidth() / 2);
                 mImageViewPointer.setPivotY(getResources().getDimension(R.dimen.pointer_y_position));
 
-                iv_button.setX(xCenter - iv_button.getWidth() / 2 + getResources().getDimension(R.dimen.gauge_button_left_margin));
-                iv_button.setY(getHeight() - iv_button.getHeight() - getResources().getDimension(R.dimen.gauge_button_bottom_margin));
+                mImageViewPointer_battery.setPivotX(mImageViewPointer_battery.getWidth() / 2);
+                mImageViewPointer_battery.setPivotY(getResources().getDimension(R.dimen.pointer_y_position));
 
-      //          mImageViewConnection.setX(xCenter + getResources().getDimension(R.dimen.connection_icon_left_margin));
-      //          mImageViewConnection.setY(yCenter - getResources().getDimension(R.dimen.connection_icon_bottom_margin));
 
                 setPointerValue(0);
             }
@@ -140,6 +148,21 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     }
 
     @Override
+    public void setPointerValue_Battery(final float value) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            public void run() {
+                // Calculate the angle that corresponds to the value.
+                float angle = 30 * value + 210;
+
+                ((GradientScale_Battery) mImageViewScaleBg_battery).setArcAngle(angle - 210);
+                mImageViewScaleBg_battery.invalidate();
+                mImageViewPointer_battery.setRotation(angle);
+            }
+        });
+
+    }
+
+    @Override
     public void set7SegmentDisplayValue(final String value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
@@ -152,6 +175,22 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     public void set7SegmentLabel(String text) {
         mTextView7SegmentLabel.setText(text);
     }
+
+    @Override
+    public void set7SegmentLabel_Battery(String text) {
+        mTextView7SegmentLabel_battery.setText(text);
+    }
+
+    @Override
+    public void set7SegmentDisplayValue_Battery(final String value) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            public void run() {
+                mTextView7SegmentValue_battery.setText(value);
+            }
+        });
+    }
+
+
 
     @Override
     public void setMinorLabel(String text) {

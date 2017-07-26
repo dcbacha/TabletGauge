@@ -358,11 +358,29 @@ public class AccelGauge implements IGauge, SensorEventListener {
         mDisplayRequiresUpdate = false;
     }
 
+    private void updateDisplayValue_Battery(float value) {
+        DecimalFormat df;
+
+        if (value < 1)
+            df = new DecimalFormat("0.0");
+        else
+            df = new DecimalFormat("###.0");
+
+        String text = df.format(value);
+        mIGaugeUI.set7SegmentDisplayValue_Battery(text);
+
+        mTimeForLastDisplayUpdate = System.currentTimeMillis();
+        mDisplayRequiresUpdate = false;
+    }
+
     /**
      * Updates the gauge with data which includes the data on the 7 segment display as well
      * as the position of the pointer.
      */
     private void updateGauge() {
+        setGaugePointerValue_Battery(80/20);
+        updateDisplayValue_Battery(80);
+
         switch (mGaugeMode) {
             case GAUGE_MODE_SPEED:
 
@@ -390,6 +408,8 @@ public class AccelGauge implements IGauge, SensorEventListener {
 
             case GAUGE_MODE_DEMO:
 
+
+
                 if (!mDemoDecrement && (mDemoSpeedValue >= MAX_GAUGE_VALUE))
                     mDemoDecrement = true;
                 else if (mDemoDecrement && (mDemoSpeedValue <= 0))
@@ -400,7 +420,8 @@ public class AccelGauge implements IGauge, SensorEventListener {
                 else
                     mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
 
-                setGaugePointerValue(mDemoSpeedValue/10);
+                setGaugePointerValue(mDemoSpeedValue/20);
+
                 updateDisplayValue(mDemoSpeedValue);
 
                 break;
@@ -415,10 +436,21 @@ public class AccelGauge implements IGauge, SensorEventListener {
      * @param value The value to set.
      */
     private void setGaugePointerValue(float value) {
-        if (value > MAX_GAUGE_VALUE)
+        if (value > MAX_GAUGE_VALUE) {
             mIGaugeUI.setPointerValue(MAX_GAUGE_VALUE);
-        else
+        }
+        else {
             mIGaugeUI.setPointerValue(value);
+        }
+    }
+
+    private void setGaugePointerValue_Battery(float value) {
+        if (value > MAX_GAUGE_VALUE) {
+            mIGaugeUI.setPointerValue_Battery(MAX_GAUGE_VALUE);
+        }
+        else {
+            mIGaugeUI.setPointerValue_Battery(value);
+        }
     }
 
     /**

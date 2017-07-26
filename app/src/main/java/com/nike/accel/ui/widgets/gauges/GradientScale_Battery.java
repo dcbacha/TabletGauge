@@ -47,7 +47,7 @@ public class GradientScale_Battery extends ImageView {
         // Draw the red segments
         float startAngle = 120;
         float sweepAngle = mAngle > RED_SWEEP_ANGLE ? RED_SWEEP_ANGLE : mAngle;
-        mPaintBg.setColor(getResources().getColor(R.color.green_segments));
+        mPaintBg.setColor(getResources().getColor(R.color.red_segments));
 
         canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
 
@@ -71,7 +71,7 @@ public class GradientScale_Battery extends ImageView {
         if (sweepAngle > 180)
             sweepAngle = 180;
 
-        mPaintBg.setColor(getResources().getColor(R.color.red_segments));
+        mPaintBg.setColor(getResources().getColor(R.color.green_segments));
 
         canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
     }

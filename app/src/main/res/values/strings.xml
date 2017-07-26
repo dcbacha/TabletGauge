@@ -6,6 +6,6 @@
     <string name="total">Total</string>
     <string name="meters_abbrev"></string>
     <string name="m_per_second"></string>
-    <string name="speed">Speed</string>
+    <string name="speed">Velocidade</string>
     <string name="demo">Km/s</string>
 </resources>

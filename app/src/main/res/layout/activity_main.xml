@@ -1,35 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg">
 
-    <com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge_Battery
-        android:id="@+id/gauge3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="342dp"
-        android:layout_marginRight="362dp"
-        android:layout_alignTop="@+id/gauge"
-        android:layout_alignRight="@+id/gauge"
-        android:layout_alignEnd="@+id/gauge"
-        android:layout_marginTop="144dp" />
 
-    <com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge_Rpm
-        android:id="@+id/gauge2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="342dp"
-        android:layout_marginLeft="362dp"
-        android:layout_alignTop="@+id/gauge"
-        android:layout_alignLeft="@+id/gauge"
-        android:layout_alignStart="@+id/gauge"
-        android:layout_marginTop="144dp" />
 
-    <com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge
-        android:id="@+id/gauge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        <com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge
+            android:id="@+id/gauge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-</RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
