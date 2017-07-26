@@ -447,22 +447,7 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
                 break;
             case GAUGE_MODE_GPS:
                 updateSpeedGPS(mLocation);
-
-                //getSpeedGPS();
                 break;
-         /*   case GAUGE_MODE_TOTAL_DISTANCE:
-
-                if (mDisplayRequiresUpdate) {
-                    if (mGaugeMode == GAUGE_MODE_CURRENT_DISTANCE) {
-                        updateDisplayValue(mTotalDistance);
-                        setGaugePointerValue(mTotalDistance);
-                    } else {
-                        updateDisplayValue(getTotalDistanceSinceAppFirstStarted());
-                        setGaugePointerValue(getTotalDistanceSinceAppFirstStarted());
-                    }
-                }
-
-                break;*/
 
             case GAUGE_MODE_DEMO:
 
