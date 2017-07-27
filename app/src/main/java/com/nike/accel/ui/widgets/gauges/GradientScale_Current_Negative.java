@@ -24,7 +24,7 @@ public class GradientScale_Current_Negative extends ImageView {
      * starts and yellow will overlap into the area where green starts. To get an exact
      * alignment, the sweep angles are adjusted.
      */
-    private final float RED_SWEEP_ANGLE = 48.1f;//29.6f;
+    private final float RED_SWEEP_ANGLE = 30f;
     private final float YELLOW_SWEEP_ANGLE = 90.2f;
 
     public GradientScale_Current_Negative(Context context) {
@@ -45,7 +45,7 @@ public class GradientScale_Current_Negative extends ImageView {
                 getHeight() - getResources().getDimension(R.dimen.segment_margin));
 
         // Draw the red segments
-        float startAngle = 0;
+        float startAngle = -0.2f;
         float sweepAngle = mAngle > RED_SWEEP_ANGLE ? RED_SWEEP_ANGLE : mAngle;
         mPaintBg.setColor(getResources().getColor(R.color.mobilislightblue));
 
@@ -57,7 +57,7 @@ public class GradientScale_Current_Negative extends ImageView {
         // Draw the yellow segments
         startAngle = startAngle + sweepAngle;
         sweepAngle = mAngle - RED_SWEEP_ANGLE > YELLOW_SWEEP_ANGLE ? YELLOW_SWEEP_ANGLE : mAngle - RED_SWEEP_ANGLE;
-        mPaintBg.setColor(getResources().getColor(R.color.yellow_segments));
+        mPaintBg.setColor(getResources().getColor(R.color.green_segments));
 
         canvas.drawArc(rect, startAngle, sweepAngle, true, mPaintBg);
 

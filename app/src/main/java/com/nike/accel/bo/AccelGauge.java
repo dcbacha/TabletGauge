@@ -51,7 +51,8 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
     private final int SENSOR_READ_RATE = 10; // ms
     public static final int TEXT_UPDATE_INTERVAL = 500; // ms
 
-    private float CORRENTE = 0;
+    private float nCORRENTE = 0;
+    private float nBATERIA = 0;
 
     private IGaugeUI mIGaugeUI;
     private IGaugeData mIGaugeData;
@@ -72,7 +73,8 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
     private int mTotalAveSpeedPoints;
     private float mDemoSpeedValue;
     private boolean mDemoDecrement;
-    private boolean mCurrentDecrement;
+    private boolean mDemoCurrentDecrement;
+    private boolean mDemoBatteryDecrement;
     private boolean mIgnoreSensorData;
     private float mMaxSensorVal;
     private float mSpeed;
@@ -397,9 +399,9 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
         DecimalFormat df;
 
         if (value < 1)
-            df = new DecimalFormat("0.0");
+            df = new DecimalFormat("0");
         else
-            df = new DecimalFormat("###.0");
+            df = new DecimalFormat("###");
 
         String text = df.format(value);
         mIGaugeUI.set7SegmentDisplayValue_Battery(text);
@@ -412,9 +414,9 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
         DecimalFormat df;
 
         if (value < 1)
-            df = new DecimalFormat("0.0");
+            df = new DecimalFormat("0");
         else
-            df = new DecimalFormat("###.0");
+            df = new DecimalFormat("###");
 
         String text = df.format(value);
         mIGaugeUI.set7SegmentDisplayValue_Current(text);
@@ -428,7 +430,7 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
      * as the position of the pointer.
      */
     private void updateGauge() {
-        updateGaugeBattery(90);
+        //updateGaugeBattery(90);
         //updateGaugeCurrent(-100);
 
         switch (mGaugeMode) {
@@ -466,17 +468,29 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
                 setGaugePointerValue(mDemoSpeedValue);
                 updateDisplayValue(mDemoSpeedValue);
 
-                if (!mCurrentDecrement && (CORRENTE >= MAX_GAUGE_VALUE_CURRENT))
-                    mCurrentDecrement = true;
-                else if (mCurrentDecrement && (CORRENTE <= MIN_GAUGE_VALUE_CURRENT))
-                    mCurrentDecrement = false;
+                if (!mDemoCurrentDecrement && (nCORRENTE >= MAX_GAUGE_VALUE_CURRENT))
+                    mDemoCurrentDecrement = true;
+                else if (mDemoCurrentDecrement && (nCORRENTE <= MIN_GAUGE_VALUE_CURRENT))
+                    mDemoCurrentDecrement = false;
 
-                if(mCurrentDecrement)
-                    CORRENTE = CORRENTE - (100f / 150f);
+                if(mDemoCurrentDecrement)
+                    nCORRENTE = nCORRENTE - (100f / 150f);
                 else
-                    CORRENTE = CORRENTE + (100f / 150f);
+                    nCORRENTE = nCORRENTE + (100f / 150f);
 
-                updateGaugeCurrent(CORRENTE);
+                updateGaugeCurrent(nCORRENTE);
+
+                if (!mDemoBatteryDecrement && (nBATERIA >= MAX_GAUGE_VALUE_BATTERY))
+                    mDemoBatteryDecrement = true;
+                else if (mDemoBatteryDecrement && (nBATERIA <= 0))
+                    mDemoBatteryDecrement = false;
+
+                if(mDemoBatteryDecrement)
+                    nBATERIA = nBATERIA - (5f / 150f);
+                else
+                    nBATERIA = nBATERIA + (5f / 150f);
+
+                updateGaugeBattery(nBATERIA);
                 break;
 
         }

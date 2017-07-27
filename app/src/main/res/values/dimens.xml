@@ -3,7 +3,7 @@
     <dimen name="units_text_size">15sp</dimen>
     <dimen name="units_margin_left">5sp</dimen>
     <dimen name="pointer_top_margin">84dp</dimen>
-    <dimen name="pointer_height">45dp</dimen>
+    <dimen name="pointer_height">48dp</dimen>
     <dimen name="pointer_y_position">100dp</dimen>
     <dimen name="gauge_size">500dp</dimen>
     <dimen name="amount_container_padding_right">10dp</dimen>

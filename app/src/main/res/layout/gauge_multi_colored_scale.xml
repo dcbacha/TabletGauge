@@ -21,7 +21,9 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="@+id/iv_scale_bg"
             app:layout_constraintRight_toRightOf="@+id/iv_gauge3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
 
         <com.nike.accel.ui.widgets.gauges.GradientScale_Current_Negative
@@ -34,7 +36,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp" />
 
         <com.nike.accel.ui.widgets.gauges.GradientScale_Current_Positive
             android:id="@+id/iv_scale_bg4"
@@ -46,7 +49,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/iv_gauge3"
@@ -60,48 +64,14 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/ll_amount3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:paddingRight="@dimen/amount_container_padding_right"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_gauge3"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView5"
-            app:layout_constraintRight_toRightOf="@+id/iv_gauge3"
-            app:layout_constraintTop_toTopOf="@+id/iv_gauge3">
-
-            <TextView
-                android:id="@+id/tv_7_segment_value3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textColor="@color/primary_labels"
-                android:textSize="@dimen/amount_text_size2" />
-
-            <TextView
-                android:id="@+id/tv_7_segment_label3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_7_segment_value3"
-                android:layout_marginLeft="@dimen/units_margin_left"
-                android:layout_toRightOf="@id/tv_7_segment_value3"
-                android:textColor="@color/primary_labels"
-                android:textSize="@dimen/units_text_size" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/iv_pointer3"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/pointer_height2"
+            android:layout_height="20dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
             android:src="@drawable/gauge_pointer"
@@ -109,9 +79,10 @@
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge3"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="@+id/iv_gauge3"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintTop_toTopOf="@+id/iv_gauge3"
-            android:layout_marginTop="115dp" />
+            android:layout_marginTop="115dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -125,7 +96,9 @@
             app:layout_constraintLeft_toLeftOf="@+id/iv_scale_bg2"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="150dp" />
+            android:layout_marginTop="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <com.nike.accel.ui.widgets.gauges.GradientScale_Battery
             android:id="@+id/iv_scale_bg2"
@@ -135,7 +108,8 @@
             android:layout_marginTop="150dp"
             android:scaleType="fitXY"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp" />
 
         <ImageView
             android:id="@+id/iv_gauge2"
@@ -149,7 +123,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="150dp" />
+            android:layout_marginTop="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <LinearLayout
             android:id="@+id/ll_amount2"
@@ -165,7 +141,10 @@
             app:layout_constraintTop_toTopOf="@+id/iv_gauge2"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_gauge2"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.52">
 
             <TextView
                 android:id="@+id/tv_7_segment_value2"
@@ -191,7 +170,7 @@
         <ImageView
             android:id="@+id/iv_pointer2"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/pointer_height2"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/gauge_pointer"
             app:layout_constraintTop_toTopOf="@+id/iv_gauge2"
@@ -200,12 +179,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="@+id/iv_scale_bg2"
-            app:layout_constraintHorizontal_bias="0.5" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="@dimen/gauge_size"
-            android:layout_height="@dimen/gauge_size"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
             android:background="@drawable/gauge_segment_bg"
             android:scaleType="fitXY"
             android:layout_marginLeft="8dp"
@@ -213,12 +193,14 @@
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_gauge"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <com.nike.accel.ui.widgets.gauges.GradientScale
             android:id="@+id/iv_scale_bg"
-            android:layout_width="@dimen/gauge_size"
-            android:layout_height="@dimen/gauge_size"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
@@ -227,12 +209,14 @@
             android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/iv_gauge"
-            android:layout_width="@dimen/gauge_size"
-            android:layout_height="@dimen/gauge_size"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -242,13 +226,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/iv_button"
-            android:layout_width="@dimen/gauge_button_width"
-            android:layout_height="@dimen/gauge_button_height"
-            android:layout_marginBottom="37dp"
+            android:layout_width="175dp"
+            android:layout_height="59dp"
+            android:layout_marginBottom="34dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:scaleType="fitXY"
@@ -256,12 +242,14 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_gauge"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge"
-            app:layout_constraintRight_toRightOf="@+id/iv_gauge" />
+            app:layout_constraintRight_toRightOf="@+id/iv_gauge"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/iv_pointer"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/pointer_height"
+            android:layout_height="45dp"
             android:scaleType="fitCenter"
             android:src="@drawable/gauge_pointer"
             app:layout_constraintTop_toTopOf="@+id/iv_gauge"
@@ -270,7 +258,9 @@
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="@+id/iv_gauge"
-            app:layout_constraintHorizontal_bias="0.505" />
+            app:layout_constraintHorizontal_bias="0.505"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <TextView
             android:id="@+id/tv_top_label"
@@ -279,13 +269,13 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="187dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="0dp"
             android:textColor="@color/minor_labels"
             android:textSize="@dimen/measurement_top_label_text_size"
             app:layout_constraintBottom_toBottomOf="@+id/iv_gauge"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge"
-            app:layout_constraintRight_toRightOf="@+id/iv_gauge" />
+            app:layout_constraintRight_toRightOf="@+id/iv_gauge"
+            android:layout_marginStart="8dp" />
 
         <LinearLayout
             android:id="@+id/ll_amount"
@@ -297,10 +287,12 @@
             android:layout_marginTop="225dp"
             android:orientation="horizontal"
             android:paddingRight="@dimen/amount_container_padding_right"
-            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintHorizontal_bias="0.54"
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge"
             app:layout_constraintRight_toRightOf="@+id/iv_gauge"
-            app:layout_constraintTop_toTopOf="@+id/iv_gauge">
+            app:layout_constraintTop_toTopOf="@+id/iv_gauge"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:id="@+id/tv_7_segment_value"
@@ -330,20 +322,80 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/primary_labels"
             android:textSize="@dimen/measurement_bottom_label_text_size"
-            android:layout_marginRight="0dp"
             app:layout_constraintRight_toRightOf="@+id/iv_gauge"
             android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/iv_gauge"
             app:layout_constraintBottom_toBottomOf="@+id/iv_gauge"
             android:layout_marginBottom="155dp"
-            app:layout_constraintHorizontal_bias="0.496" />
+            app:layout_constraintHorizontal_bias="0.496"
+            android:layout_marginStart="8dp" />
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/guideline"
             app:layout_constraintGuide_begin="20dp"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline2"
+            app:layout_constraintGuide_begin="20dp"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline3"
+            app:layout_constraintGuide_begin="20dp"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_amount3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/amount_container_padding_right"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_gauge3"
+            app:layout_constraintHorizontal_bias="0.54"
+            app:layout_constraintLeft_toLeftOf="@+id/imageView5"
+            app:layout_constraintRight_toRightOf="@+id/iv_gauge3"
+            app:layout_constraintTop_toTopOf="@+id/iv_gauge3"
+            app:layout_constraintVertical_bias="0.501">
+
+            <TextView
+                android:id="@+id/tv_7_segment_value3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/primary_labels"
+                android:textSize="@dimen/amount_text_size2" />
+
+            <TextView
+                android:id="@+id/tv_7_segment_label3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_7_segment_value3"
+                android:layout_marginLeft="@dimen/units_margin_left"
+                android:layout_toRightOf="@id/tv_7_segment_value3"
+                android:textColor="@color/primary_labels"
+                android:textSize="@dimen/units_text_size" />
+
+        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 
