@@ -54,7 +54,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
     public void testGaugeModes() {
 
         // Disable the gauge from processing sensor data.
-        getActivity().mAccelGauge.setIgnoreSensorData(true);
+       // getActivity().mAccelGauge.setIgnoreSensorData(true);
 
         // Reset all the data in the gauge as though it just started for the first time.
         getActivity().mAccelGauge.resetGaugeForFirstUse();
@@ -67,13 +67,13 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
 
         // Simulate the first sensor data.
         float[] data1 = {.3f, .3f, .3f};
-        getActivity().mAccelGauge.processSensorData(data1);
+      //  getActivity().mAccelGauge.processSensorData(data1);
 
         waitForGaugeToUpdate();
 
         // Simulate the second sensor data.
         float[] data2 = {.15f, .15f, .15f};
-        getActivity().mAccelGauge.processSensorData(data2);
+       // getActivity().mAccelGauge.processSensorData(data2);
 
         waitForGaugeToUpdate();
 
@@ -97,7 +97,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
 
         // Generate 400 fake data points in order to get a distance of 3.6
         for (int i = 0; i < 200; i++) {
-            getActivity().mAccelGauge.processSensorData(data1);
+        //    getActivity().mAccelGauge.processSensorData(data1);
 
             // This loop happens very quickly and will probably be faster than
             // the time interval needed for the gauge to update its display.
@@ -106,7 +106,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
             if (i == 199)
                 waitForGaugeToUpdate();
 
-            getActivity().mAccelGauge.processSensorData(data2);
+          //  getActivity().mAccelGauge.processSensorData(data2);
         }
 
         waitForGaugeToUpdate();
@@ -152,7 +152,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
 
         // Re-enable using the sensor. Vibrate the device. This will cause the accelerometer to pick
         // up motion.
-        getActivity().mAccelGauge.setIgnoreSensorData(false);
+      //  getActivity().mAccelGauge.setIgnoreSensorData(false);
         Vibrator v = (Vibrator) getActivity().getBaseContext().getSystemService(getActivity().getBaseContext().VIBRATOR_SERVICE);
         v.vibrate(2000);
 

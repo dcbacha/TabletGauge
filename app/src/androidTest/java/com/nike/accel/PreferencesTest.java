@@ -26,9 +26,8 @@ public class PreferencesTest extends ActivityInstrumentationTestCase2<MainActivi
     public void testPreferences() {
         // Test each gauge mode.
         gaugeModeTest(AccelGauge.GAUGE_MODE_GPS);
-        gaugeModeTest(AccelGauge.GAUGE_MODE_LOCATION);
+        gaugeModeTest(AccelGauge.GAUGE_MODE_ADDOFFSET);
         gaugeModeTest(AccelGauge.GAUGE_MODE_DEMO);
-        gaugeModeTest(AccelGauge.GAUGE_MODE_SPEED);
 
         // Test the saving of the total distance since the app first started.
         Random random = new Random();
