@@ -41,7 +41,6 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
     public static final int GAUGE_MODE_DEMO = 3;
     public static final int GAUGE_MODE_LOCATION = 2;
     public static final int GAUGE_MODE_GPS =1;
-    private static final String TAG = "AccelGauge";
 
     private final int MAX_GAUGE_VALUE = 50;
     private final int MAX_GAUGE_VALUE_BATTERY = 100;
@@ -53,6 +52,8 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
 
     private float nCORRENTE = 0;
     private float nBATERIA = 0;
+    private int nLOOP = 0;
+    private int maxLOOP = 500;  //para esperar 5 segundos para atualização
 
     private IGaugeUI mIGaugeUI;
     private IGaugeData mIGaugeData;
@@ -125,6 +126,8 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
     @Override
     public void onClick() {
         mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_SPEED : ++mGaugeMode;
+
+        final String TAG = "onCLick()";
         Log.i(TAG, String.valueOf(mGaugeMode));
         Preferences.saveGaugeMode(mGaugeMode, mContext);
         setDisplayMode();
@@ -293,7 +296,7 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
      * @param data A 3 dimensional array containing acceleration data for each axis: x, y, z
      */
     public void processSensorData(float[] data) {
-
+        //final String TAG = "processSensorData()";
        // Log.i(TAG, String.valueOf(data[0]));
        // Log.i(TAG, String.valueOf(data[1]));
        // Log.i(TAG, String.valueOf(data[2]));
@@ -432,6 +435,16 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
     private void updateGauge() {
         //updateGaugeBattery(90);
         //updateGaugeCurrent(-100);
+        final String TAG = "updateGauge()";
+        //Log.i(TAG, "entrou");
+
+        if (nLOOP < maxLOOP)
+            nLOOP ++;
+        else{
+            nLOOP = 0;
+            Log.i(TAG, "entrou");
+        }
+
 
         switch (mGaugeMode) {
             case GAUGE_MODE_SPEED:
@@ -564,6 +577,9 @@ public class AccelGauge implements IGauge, SensorEventListener, IBaseGpsListener
         //setGaugePointerValue(mDemoSpeedValue);
         // updateDisplayValue(mDemoSpeedValue);
         // TODO Auto-generated method stub
+
+        final String TAG = "updateSpeedGPS()";
+
         float nCurrentSpeed = 0;
 
         if(location != null)
