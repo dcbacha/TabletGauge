@@ -39,7 +39,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
 
         mTextView_tv_7_segment_value = (TextView) getActivity().mGauge.findViewById(R.id.tv_7_segment_value);
         mTextView_tv_7_segment_label = (TextView) getActivity().mGauge.findViewById(R.id.tv_7_segment_label);
-        mTextView_tv_top_label = (TextView) getActivity().mGauge.findViewById(R.id.tv_top_label);
+     //   mTextView_tv_top_label = (TextView) getActivity().mGauge.findViewById(R.id.tv_top_label);
         mTextView_tv_bottom_label = (TextView) getActivity().mGauge.findViewById(R.id.tv_bottom_label);
     }
 
@@ -47,7 +47,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
 
         assertNotNull("mTextView_tv_7_segment_value is null.", mTextView_tv_7_segment_value);
         assertNotNull("mTextView_tv_7_segment_label is null.", mTextView_tv_7_segment_label);
-        assertNotNull("mTextView_tv_top_label is null.", mTextView_tv_top_label);
+      //  assertNotNull("mTextView_tv_top_label is null.", mTextView_tv_top_label);
         assertNotNull("mTextView_tv_bottom_label is null.", mTextView_tv_bottom_label);
     }
 

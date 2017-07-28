@@ -42,13 +42,17 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AccelGauge implements IGauge, IBaseGpsListener {
 
-    private static final int GAUGE_MODE_DEMO = 3;
+    private static final int GAUGE_MODE_DEMO = 4;
+    private static final int GAUGE_MODE_CURRENT_AGRESSIVE = 3;
     private static final int GAUGE_MODE_CURRENT_TEST = 2;
     private static final int GAUGE_MODE_GPS =1;
     private static final int GAUGE_MODE_ADDOFFSET = 0;
 
-    private static float OFFSET;
+    private static final int gSpeed = 1;
+    private static final int gBattery = 2;
+    private static final int gCurrent = 3;
 
+    private static float OFFSET;
 
     private final int MAX_GAUGE_VALUE = 50;
     private final int MAX_GAUGE_VALUE_BATTERY = 100;
@@ -85,7 +89,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
     }
 
     private void init() {
-        mGaugeMode = GAUGE_MODE_DEMO;
+        mGaugeMode = GAUGE_MODE_ADDOFFSET;
 
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -104,119 +108,100 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
     @Override
     public void onClick() {
         mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_ADDOFFSET : ++mGaugeMode;
-       // final String TAG = "----------- onCLick()";
-       // Log.i(TAG, String.valueOf(mGaugeMode));
         setDisplayMode();
     }
 
     private void setDisplayMode() {
-
-        mIGaugeUI.set7SegmentLabel_Battery("%");
-        mIGaugeUI.set7SegmentLabel_Current("A");
+        mIGaugeUI.set7SegmentLabelBattery("%");
+        mIGaugeUI.set7SegmentLabelCurrent("A");
+        mIGaugeUI.set7SegmentLabelSpeed(mContext.getResources().getString(R.string.m_per_second));
 
         switch (mGaugeMode) {
-
             case GAUGE_MODE_ADDOFFSET:
-                mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.cinco));
-                mIGaugeUI.setMinorLabel("");
                 break;
 
             case GAUGE_MODE_GPS:
-                mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.gps));
-                mIGaugeUI.setMinorLabel("");
                 break;
 
             case GAUGE_MODE_CURRENT_TEST:
-                mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.current));
-                mIGaugeUI.setMinorLabel("");
+                break;
+
+            case GAUGE_MODE_CURRENT_AGRESSIVE:
+                mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.agressivo));
                 break;
 
             case GAUGE_MODE_DEMO:
-                mIGaugeUI.set7SegmentLabel(mContext.getResources().getString(R.string.m_per_second));
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.demo));
-                mIGaugeUI.setMinorLabel("");
                 break;
         }
-
         updateGauge();
     }
 
-    private void startTimerTask() {
-        mGaugeTimerTask = new GaugeTimerTask();
-        mTimerUpdate = new Timer();
-        int SENSOR_READ_RATE = 50;
-        mTimerUpdate.scheduleAtFixedRate(mGaugeTimerTask, 0, SENSOR_READ_RATE);
+    private void updateGaugeSpeed(float value){
+        updateDisplayValue(value, gSpeed);
+        setGaugePointerValue(value, gSpeed);
     }
 
-    private class GaugeTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            updateGauge();
+    private void updateGaugeBattery(float value){
+        setGaugePointerValue(value, gBattery);
+        updateDisplayValue(value, gBattery);
+    }
+
+    private void updateGaugeCurrent(float value){
+        setGaugePointerValue(value, gCurrent);
+        updateDisplayValue(value, gCurrent);
+    }
+
+    private void updateDisplayValue(float value, int gauge) {
+        DecimalFormat df;
+        String text;
+
+        switch (gauge) {
+            case gSpeed:
+                if (value < 1)  df = new DecimalFormat("0.0");
+                else            df = new DecimalFormat("###.0");
+                text = df.format(value);
+                mIGaugeUI.set7SegmentSpeed(text);
+                break;
+
+            case gBattery:
+                if (value < 1)  df = new DecimalFormat("0");
+                else            df = new DecimalFormat("###");
+                text = df.format(value);
+                mIGaugeUI.set7SegmentBattery(text);
+                break;
+
+            case gCurrent:
+                if (value < 1)  df = new DecimalFormat("0");
+                else            df = new DecimalFormat("###");
+                text = df.format(value);
+                mIGaugeUI.set7SegmentCurrent(text);
+                break;
         }
     }
 
-    @Override
-    public void onAppDestroy() {
-        shutdown();
-    }
+    private void setGaugePointerValue(float value, int gauge) {
+        switch (gauge) {
+            case gSpeed:
+                if (value > MAX_GAUGE_VALUE) mIGaugeUI.setPointerSpeed(MAX_GAUGE_VALUE);
+                else mIGaugeUI.setPointerSpeed(value);
+                break;
 
-    @Override
-    public void onAppStop() {
-    }
+            case gBattery:
+                if (value > MAX_GAUGE_VALUE_BATTERY) mIGaugeUI.setPointerBattery(MAX_GAUGE_VALUE_BATTERY);
+                else mIGaugeUI.setPointerBattery(value);
+                break;
 
-    @Override
-    public void onAppPause() {
-    }
-
-    @Override
-    public void onAppResume() {
-    }
-
-    private void shutdown() {
-        mTimerUpdate.cancel();
-    }
-
-
-    private void updateDisplayValue(float value) {
-        DecimalFormat df;
-
-        if (value < 1)
-            df = new DecimalFormat("0.0");
-        else
-            df = new DecimalFormat("###.0");
-
-        String text = df.format(value);
-        mIGaugeUI.set7SegmentDisplayValue(text);
-
-    }
-
-    private void updateDisplayValue_Battery(float value) {
-        DecimalFormat df;
-
-        if (value < 1)
-            df = new DecimalFormat("0");
-        else
-            df = new DecimalFormat("###");
-
-        String text = df.format(value);
-        mIGaugeUI.set7SegmentDisplayValue_Battery(text);
-
-    }
-
-    private void updateDisplayValue_Current(float value) {
-        DecimalFormat df;
-
-        if (value < 1)
-            df = new DecimalFormat("0");
-        else
-            df = new DecimalFormat("###");
-
-        String text = df.format(value);
-        mIGaugeUI.set7SegmentDisplayValue_Current(text);
-
+            case gCurrent:
+                if (value > 0 && value > MAX_GAUGE_VALUE_CURRENT) mIGaugeUI.setPointerCurrent(MAX_GAUGE_VALUE_CURRENT);
+                else if(value < 0 && value < MIN_GAUGE_VALUE_CURRENT) mIGaugeUI.setPointerCurrent(MIN_GAUGE_VALUE_CURRENT);
+                else if (value == 0) mIGaugeUI.setPointerCurrent(value);
+                else mIGaugeUI.setPointerCurrent(value);
+                break;
+        }
     }
 
     private void updateGauge() {
@@ -225,7 +210,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
             nLOOP ++;
         else{
             nLOOP = 0;
-            Log.i("---LOOP", "entrou");
+           // Log.i("---LOOP", "entrou");
             batteryRequest();
         }
 
@@ -243,6 +228,10 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                 updateSpeedGPSandCurrent(mLocation);
                 break;
 
+            case GAUGE_MODE_CURRENT_AGRESSIVE:
+                updateSpeedGPSandCurrentAgressive(mLocation);
+                break;
+
             case GAUGE_MODE_DEMO:
                 if (!mDemoDecrement && (mDemoSpeedValue >= MAX_GAUGE_VALUE))
                     mDemoDecrement = true;
@@ -254,8 +243,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                 else
                     mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
 
-                setGaugePointerValue(mDemoSpeedValue);
-                updateDisplayValue(mDemoSpeedValue);
+                updateGaugeSpeed(mDemoSpeedValue);
 
                 if (!mDemoCurrentDecrement && (nCORRENTE >= MAX_GAUGE_VALUE_CURRENT))
                     mDemoCurrentDecrement = true;
@@ -268,52 +256,8 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                     nCORRENTE = nCORRENTE + (100f / 150f);
 
                 updateGaugeCurrent(nCORRENTE);
-
                 break;
-
         }
-    }
-
-    private void updateGaugeBattery(float value){
-        setGaugePointerValue_Battery(value);
-        updateDisplayValue_Battery(value);
-    }
-
-    private void updateGaugeCurrent(float value){
-        setGaugePointerValue_Current(value);
-        updateDisplayValue_Current(value);
-    }
-
-
-    /**
-     * Sets the gauge's pointer to the specified value.
-     *
-     * @param value The value to set.
-     */
-    private void setGaugePointerValue(float value) {
-        if (value > MAX_GAUGE_VALUE)
-            mIGaugeUI.setPointerValue(MAX_GAUGE_VALUE);
-        else
-            mIGaugeUI.setPointerValue(value);
-
-    }
-
-    private void setGaugePointerValue_Battery(float value) {
-        if (value > MAX_GAUGE_VALUE_BATTERY)
-            mIGaugeUI.setPointerValue_Battery(MAX_GAUGE_VALUE_BATTERY);
-        else
-            mIGaugeUI.setPointerValue_Battery(value);
-
-    }
-
-    private void setGaugePointerValue_Current(float value) {
-        if (value > 0 && value > MAX_GAUGE_VALUE_CURRENT)
-            mIGaugeUI.setPointerValue_Current(MAX_GAUGE_VALUE_CURRENT);
-         else if(value <0 && value < MIN_GAUGE_VALUE_CURRENT)
-            mIGaugeUI.setPointerValue_Current(MIN_GAUGE_VALUE_CURRENT);
-        else
-            mIGaugeUI.setPointerValue_Current(value);
-
     }
 
 
@@ -321,55 +265,59 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
         float nCurrentSpeed = 0;
 
         if(location != null)
-        {
             nCurrentSpeed = location.getSpeed();
-        }
 
         Formatter fmt = new Formatter(new StringBuilder());
         fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        if(nCurrentSpeed < 5)
-            OFFSET = nCurrentSpeed;
-        else
-            OFFSET = 5f;
+        if(nCurrentSpeed < 5) OFFSET = nCurrentSpeed;
+        else OFFSET = 5f;
 
-        setGaugePointerValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
-        updateDisplayValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
+        updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
+
+        mSpeedValues[1] = Float.parseFloat(strCurrentSpeed);
+
+        if(mSpeedValues[0] < mSpeedValues[1]){
+            updateGaugeCurrent(mSpeedValues[1]*6);
+            mSpeedValues[0] = mSpeedValues[0] + (100f/300f);
+        } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
+            mSpeedValues[0] = mSpeedValues[1];
+            updateGaugeCurrent(0);
+        } else {
+            updateGaugeCurrent(mSpeedValues[1]*-4);
+            mSpeedValues[0] = mSpeedValues[0] - (100f/300f);
+        }
     }
 
     private void updateSpeedGPS(CLocation location){
         float nCurrentSpeed = 0;
 
         if(location != null)
-        {
             nCurrentSpeed = location.getSpeed();
-        }
 
         Formatter fmt = new Formatter(new StringBuilder());
         fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        if(nCurrentSpeed < 5)
-            OFFSET = Float.parseFloat(strCurrentSpeed);
-        else
-            OFFSET = 5f;
+        if(nCurrentSpeed < 5) OFFSET = Float.parseFloat(strCurrentSpeed);
+        else OFFSET = 5f;
 
         mSpeedValues[1] = Float.parseFloat(strCurrentSpeed);
 
         if(mSpeedValues[0] < mSpeedValues[1]){
-            setGaugePointerValue(mSpeedValues[0]+OFFSET);
-            updateDisplayValue(mSpeedValues[0]+OFFSET);
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+            updateGaugeCurrent(mSpeedValues[0]*6);
             mSpeedValues[0] = mSpeedValues[0] + (100f/300f);
         } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
-            setGaugePointerValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
-            updateDisplayValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
+            updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
             mSpeedValues[0] = mSpeedValues[1];
+            updateGaugeCurrent(0);
         } else {
-            setGaugePointerValue(mSpeedValues[0]+OFFSET);
-            updateDisplayValue(mSpeedValues[0]+OFFSET);
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+            updateGaugeCurrent(mSpeedValues[0]*-4);
             mSpeedValues[0] = mSpeedValues[0] - (100f/300f);
         }
     }
@@ -379,94 +327,77 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
         float nCurrentSpeed = 0;
 
         if(location != null)
-        {
             nCurrentSpeed = location.getSpeed();
-        }
 
         Formatter fmt = new Formatter(new StringBuilder());
         fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        if(nCurrentSpeed < 5)
-            OFFSET = Float.parseFloat(strCurrentSpeed);
-        else
-            OFFSET = 5f;
+        if(nCurrentSpeed < 5) OFFSET = Float.parseFloat(strCurrentSpeed);
+        else OFFSET = 5f;
 
         mSpeedValues[1] = Float.parseFloat(strCurrentSpeed);
 
         if(mSpeedValues[0] < mSpeedValues[1]){
-            setGaugePointerValue(mSpeedValues[0]+OFFSET);
-            updateDisplayValue(mSpeedValues[0]+OFFSET);
-            ++mSpeedValues[0];
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*6);
-
+            mSpeedValues[0] = mSpeedValues[0] + (50f/300f);
         } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
-            setGaugePointerValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
-            updateDisplayValue(Float.parseFloat(strCurrentSpeed)+OFFSET);
+            updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
             mSpeedValues[0] = mSpeedValues[1];
             updateGaugeCurrent(0);
-
         } else {
-            setGaugePointerValue(mSpeedValues[0]+OFFSET);
-            updateDisplayValue(mSpeedValues[0]+OFFSET);
-            --mSpeedValues[0];
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-4);
+            mSpeedValues[0] = mSpeedValues[0] - (50f/300f);
         }
-
     }
 
+    private void updateSpeedGPSandCurrentAgressive(CLocation location){
 
-    //Methods do IBaseGPSLinseter
+        float nCurrentSpeed = 0;
 
-    @Override
-    public void onLocationChanged(Location location) {
         if(location != null)
-        {
-            //this.getSpeedGPS(myLocation);
-            mLocation = new CLocation(location, true);
+            nCurrentSpeed = location.getSpeed();
+
+        Formatter fmt = new Formatter(new StringBuilder());
+        fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
+        String strCurrentSpeed = fmt.toString();
+        strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
+
+        if(nCurrentSpeed < 5) OFFSET = Float.parseFloat(strCurrentSpeed);
+        else OFFSET = 5f;
+
+        mSpeedValues[1] = Float.parseFloat(strCurrentSpeed);
+
+        if(mSpeedValues[0] < mSpeedValues[1]){
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*20);
+            mSpeedValues[0] = mSpeedValues[0] + (10f/300f);
+        } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
+            updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
+            mSpeedValues[0] = mSpeedValues[1];
+            updateGaugeCurrent(0);
+        } else {
+            updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-14);
+            mSpeedValues[0] = mSpeedValues[0] - (10f/300f);
         }
-
-    }
-
-   /* private boolean useMetricUnits() {
-        // TODO Auto-generated method stub
-       // CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
-        return true;
-    }*/
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onGpsStatusChanged(int event) {
-
     }
 
     private void batteryRequest() {
-        String TAG = "------------- batteryRequest()";
+       // String TAG = "------------- batteryRequest()";
 
         ConnectivityManager connectionManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         wifiCheck = connectionManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (!wifiCheck.isConnected()) {
-            Log.i(TAG, "Não conectado");
-            updateGaugeBattery(80);
+           // Log.i(TAG, "Não conectado");
+            updateGaugeBattery(82);
 
         } else {
-            Log.i(TAG, "Conectado");
+           // Log.i(TAG, "Conectado");
             String result = "";
             String SOC;
             InputStream is = null;
@@ -521,5 +452,65 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                 Log.e("log_tag", "Error parsing data " + e.toString());
             }
         }
+    }
+
+    /******************* Funções de mudança de gps *************************/
+    @Override
+    public void onLocationChanged(Location location) {
+        if(location != null) mLocation = new CLocation(location, true);
+    }
+
+   /* private boolean useMetricUnits() {
+        // TODO Auto-generated method stub
+       // CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
+        return true;
+    }*/
+
+    @Override
+    public void onProviderDisabled(String provider) {}
+
+    @Override
+    public void onProviderEnabled(String provider) {}
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+    @Override
+    public void onGpsStatusChanged(int event) {}
+
+    /** *********************** Funções Gauge UI ***************************/
+    private void startTimerTask() {
+        mGaugeTimerTask = new GaugeTimerTask();
+        mTimerUpdate = new Timer();
+        int SENSOR_READ_RATE = 50;
+        mTimerUpdate.scheduleAtFixedRate(mGaugeTimerTask, 0, SENSOR_READ_RATE);
+    }
+
+    private class GaugeTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            updateGauge();
+        }
+    }
+
+    @Override
+    public void onAppDestroy() {
+        shutdown();
+    }
+
+    @Override
+    public void onAppStop() {
+    }
+
+    @Override
+    public void onAppPause() {
+    }
+
+    @Override
+    public void onAppResume() {
+    }
+
+    private void shutdown() {
+        mTimerUpdate.cancel();
     }
 }

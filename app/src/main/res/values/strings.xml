@@ -2,14 +2,15 @@
     <string name="app_name">Painel</string>
     <string name="action_settings">Settings</string>
     <string name="distance">Distance</string>
-    <string name="current">Corrente</string>
     <string name="total">Total</string>
     <string name="meters_abbrev"></string>
     <string name="m_per_second">km/h</string>
     <string name="speed">Velocidade</string>
-
     <string name="acelerometro">Acelerometro</string>
-    <string name="gps">GPS +5 suave</string>
+
     <string name="demo">Demo</string>
-    <string name="cinco">GPS +5</string>
+    <string name="cinco">Gps1 Corrente1</string>
+    <string name="gps">Gps2 Corrente2</string>
+    <string name="current">Gps3 Corrente3</string>
+    <string name="agressivo">Gps4 Corrente4</string>
 </resources>

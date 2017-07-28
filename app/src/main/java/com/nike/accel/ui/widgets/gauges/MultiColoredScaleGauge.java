@@ -32,10 +32,8 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     private ImageView mImageViewPointer;
     private TextView mTextView7SegmentValue;
     private TextView mTextView7SegmentLabel;
-    private TextView mTextViewTopLabel;
+   // private TextView mTextViewTopLabel;
     private TextView mTextViewBottomLabel;
-
-  //  private ImageView mImageViewConnection;
 
     private ImageView mImageViewPointer_battery;
     private ImageView mImageViewScaleBg_battery;
@@ -47,10 +45,6 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     private ImageView mImageViewScaleBg_current_pos;
     private TextView mTextView7SegmentValue_current;
     private TextView mTextView7SegmentLabel_current;
-
-
-   // private boolean mConnected;
-
 
     public MultiColoredScaleGauge(Context context) {
         super(context);
@@ -77,7 +71,6 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
 
         //gauge central
         mTextView7SegmentLabel = (TextView) vRoot.findViewById(R.id.tv_7_segment_label);
-        mTextViewTopLabel = (TextView) vRoot.findViewById(R.id.tv_top_label);
         mTextViewBottomLabel = (TextView) vRoot.findViewById(R.id.tv_bottom_label);
 
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "fonts/dseg7modern_regular.ttf");
@@ -118,9 +111,6 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
             public void onGlobalLayout() {
                 vRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                float xCenter = getWidth() / 2;
-                float yCenter = getHeight() / 2;
-
                 mImageViewPointer.setPivotX(mImageViewPointer.getWidth() / 2);
                 mImageViewPointer.setPivotY(getResources().getDimension(R.dimen.pointer_y_position));
 
@@ -130,7 +120,7 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
                 mImageViewPointer_current.setPivotX(mImageViewPointer_current.getWidth() / 2);
                 mImageViewPointer_current.setPivotY(getResources().getDimension(R.dimen.pointer_y_position2));
 
-                setPointerValue(0);
+                setPointerSpeed(0);
             }
         });
 
@@ -149,14 +139,17 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
         initialize(mContext);
     }
 
-
-    /**
-     * Sets the gauge's value. Must be a number between 0 and 10 (inclusively).
-     *
-     * @param value
-     */
     @Override
-    public void setPointerValue(final float value) {
+    public void set7SegmentSpeed(final String value) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            public void run() {
+                mTextView7SegmentValue.setText(value);
+            }
+        });
+    }
+
+    @Override
+    public void setPointerSpeed(final float value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
                 // Calculate the angle that corresponds to the value.
@@ -170,21 +163,21 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     }
 
     @Override
-    public void set7SegmentDisplayValue(final String value) {
+    public void set7SegmentLabelSpeed(String text) {
+        mTextView7SegmentLabel.setText(text);
+    }
+
+    @Override
+    public void set7SegmentBattery(final String value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
-                mTextView7SegmentValue.setText(value);
+                mTextView7SegmentValue_battery.setText(value);
             }
         });
     }
 
     @Override
-    public void set7SegmentLabel(String text) {
-        mTextView7SegmentLabel.setText(text);
-    }
-
-    @Override
-    public void setPointerValue_Battery(final float value) {
+    public void setPointerBattery(final float value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
                 // Calculate the angle that corresponds to the value.
@@ -199,21 +192,21 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     }
 
     @Override
-    public void set7SegmentLabel_Battery(String text) {
+    public void set7SegmentLabelBattery(String text) {
         mTextView7SegmentLabel_battery.setText(text);
     }
 
     @Override
-    public void set7SegmentDisplayValue_Battery(final String value) {
+    public void set7SegmentCurrent(final String value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
-                mTextView7SegmentValue_battery.setText(value);
+                mTextView7SegmentValue_current.setText(value);
             }
         });
     }
 
     @Override
-    public void setPointerValue_Current(final float value) {
+    public void setPointerCurrent(final float value) {
         ((Activity) mContext).runOnUiThread(new Runnable() {
             public void run() {
                 // Calculate the angle that corresponds to the value.
@@ -235,25 +228,10 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
     }
 
     @Override
-    public void set7SegmentLabel_Current(String text) {
+    public void set7SegmentLabelCurrent(String text) {
         mTextView7SegmentLabel_current.setText(text);
     }
 
-    @Override
-    public void set7SegmentDisplayValue_Current(final String value) {
-        ((Activity) mContext).runOnUiThread(new Runnable() {
-            public void run() {
-                mTextView7SegmentValue_current.setText(value);
-            }
-        });
-    }
-
-
-
-    @Override
-    public void setMinorLabel(String text) {
-        mTextViewTopLabel.setText(text);
-    }
 
     @Override
     public void setMajorLabel(String text) {
@@ -265,17 +243,4 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
         mIGauge = iGauge;
     }
 
-  /*  @Override
-    public void setConnected(boolean connected) {
-       // mConnected = connected;
-
-        ((Activity) mContext).runOnUiThread(new Runnable() {
-            public void run() {
-             //   if (mConnected)
-             //       mImageViewConnection.setImageDrawable(getResources().getDrawable(R.drawable.connected));
-             //   else
-             //       mImageViewConnection.setImageDrawable(getResources().getDrawable(R.drawable.not_connected));
-            }
-        });
-    }*/
 }
