@@ -57,7 +57,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
        // getActivity().mAccelGauge.setIgnoreSensorData(true);
 
         // Reset all the data in the gauge as though it just started for the first time.
-        getActivity().mAccelGauge.resetGaugeForFirstUse();
+       // getActivity().mAccelGauge.resetGaugeForFirstUse();
 
         // Wait for the gauge to update itself.
         waitForGaugeToUpdate();
@@ -133,7 +133,7 @@ public class AccelGaugeTest extends ActivityInstrumentationTestCase2<MainActivit
         assertEquals("Total distance not set to expected value.", 3.6f, actualTotalDistance);
 
         // Add some fake distance to the total distance since the app first started.
-        getActivity().mAccelGauge.setTotalDistanceSinceAppFirstStarted(1.4f);
+       // getActivity().mAccelGauge.setTotalDistanceSinceAppFirstStarted(1.4f);
         waitForGaugeToUpdate();
 
         // Read back the total distance that was displayed on the gauge.

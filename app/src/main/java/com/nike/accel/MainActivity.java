@@ -7,15 +7,12 @@ import android.view.Menu;
 import android.view.ViewTreeObserver;
 
 import com.nike.accel.bo.AccelGauge;
-import com.nike.accel.data.web.pubnub.PubNubWeb;
-import com.nike.accel.ui.widgets.gauges.IGaugeData;
 import com.nike.accel.ui.widgets.gauges.MultiColoredScaleGauge;
 
 public class MainActivity extends AppCompatActivity {
 
     public AccelGauge mAccelGauge;
     public MultiColoredScaleGauge mGauge;
-    private PubNubWeb mPubNubWeb;
     private Context mContext;
 
 
@@ -25,32 +22,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = this;
-
-        // Although the gauge component is available, it will not have completed its initialization
-        // at this stage. We need to wait until Android has loaded it before we can access it.
-
         mGauge = (MultiColoredScaleGauge) findViewById(R.id.gauge);
-
         mGauge.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 mGauge.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-             /*   mPubNubWeb = new PubNubWeb(new IWebAccess() {
-                    @Override
-                    public void onConnectionChange(boolean connected) {
-                        if (mGauge != null)
-                            mGauge.setConnected(connected);
-                    }
-                });*/
-
-                mAccelGauge = new AccelGauge(mGauge, new IGaugeData() {
-                    @Override
-                    public void dataAvailable(float speed, float aveSpeed, float currentDistance, float totalDistance) {
-                        // Send gauge data to PubNub.
-                        if (mPubNubWeb != null)
-                            mPubNubWeb.dataAvailable(speed, aveSpeed, currentDistance, totalDistance);
-                    }
-                }, mContext);
+                mAccelGauge = new AccelGauge(mGauge, mContext);
             }
         });
 
@@ -65,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
      * <p/>
      * Taken from: http://developer.android.com/guide/components/activities.html
      */
-    @Override
+  /*  @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
     }
-
+*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -77,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
         if (mAccelGauge != null) {
             mAccelGauge.onAppDestroy();
             mAccelGauge = null;
-        }
-
-        if (mPubNubWeb != null) {
-            mPubNubWeb.onAppDestroy();
-            mPubNubWeb = null;
         }
     }
 
