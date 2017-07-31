@@ -239,9 +239,9 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                     mDemoDecrement = false;
 
                 if (mDemoDecrement)
-                    mDemoSpeedValue = mDemoSpeedValue - (10f / 300f);
+                    mDemoSpeedValue = mDemoSpeedValue - (50f / 300f);
                 else
-                    mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
+                    mDemoSpeedValue = mDemoSpeedValue + (50f / 300f);
 
              //   updateGaugeSpeed(mDemoSpeedValue);
 
@@ -260,25 +260,28 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
 
                mSpeedValues[1] = mDemoSpeedValue;
 
-                Log.i("--- speed 1: ", String.valueOf(mSpeedValues[1]));
+              /*  Log.i("--- speed 1: ", String.valueOf(mSpeedValues[1]));
                 Log.i("--- speed 0: ", String.valueOf(mSpeedValues[0]));
                 Log.i("--- speed diff : ", String.valueOf(mSpeedValues[0] - mSpeedValues[1]));
                 Log.i("-----", "-----");
-
+*/
                if(mSpeedValues[0] < mSpeedValues[1]){
                     updateGaugeSpeed(mSpeedValues[0]+OFFSET);
                     updateGaugeCurrent(mSpeedValues[0]*6);
-                    mSpeedValues[0] = mSpeedValues[0] + (10f/300f);
-                } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5){
-                    updateGaugeSpeed(mDemoSpeedValue+OFFSET);
-                   updateGaugeCurrent(mDemoSpeedValue*-4);
+                    mSpeedValues[0] = mSpeedValues[0] + (50f/300f);
+                } /*else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5){
+                    //updateGaugeSpeed(mDemoSpeedValue+OFFSET);
+                   //updateGaugeCurrent(mDemoSpeedValue*-4);
                    // updateGaugeCurrent(0);
                     mSpeedValues[0] = mSpeedValues[1];
-                } else if (mSpeedValues[0] > mSpeedValues[1]){
+                } */else if (mSpeedValues[0] > mSpeedValues[1]){
                     updateGaugeSpeed(mSpeedValues[0]+OFFSET);
                     updateGaugeCurrent(mSpeedValues[0]*-4);
-                    mSpeedValues[0] = mSpeedValues[0] - (10f/300f);
+                    mSpeedValues[0] = mSpeedValues[0] - (50f/300f);
                 }
+
+                if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5)
+                    mSpeedValues[0] = mSpeedValues[1];
 
 
                 break;
@@ -368,15 +371,18 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*6);
             mSpeedValues[0] = mSpeedValues[0] + (50f/300f);
-        } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
+        } /*else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
             updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
             mSpeedValues[0] = mSpeedValues[1];
             updateGaugeCurrent(0);
-        } else {
+        }*/ else {
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-4);
             mSpeedValues[0] = mSpeedValues[0] - (50f/300f);
         }
+
+        if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5)
+            mSpeedValues[0] = mSpeedValues[1];
     }
 
     private void updateSpeedGPSandCurrentAgressive(CLocation location){
@@ -398,17 +404,20 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
 
         if(mSpeedValues[0] < mSpeedValues[1]){
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
-            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*20);
+            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*9);
             mSpeedValues[0] = mSpeedValues[0] + (40f/300f);
-        } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
+        } /*else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
             updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
             mSpeedValues[0] = mSpeedValues[1];
             updateGaugeCurrent(0);
-        } else {
+        }*/ else {
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
-            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-14);
+            updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-6);
             mSpeedValues[0] = mSpeedValues[0] - (40f/300f);
         }
+
+        if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5)
+            mSpeedValues[0] = mSpeedValues[1];
     }
 
     private void batteryRequest() {
