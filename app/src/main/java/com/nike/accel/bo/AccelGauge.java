@@ -42,11 +42,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AccelGauge implements IGauge, IBaseGpsListener {
 
-    private static final int GAUGE_MODE_DEMO = 4;
-    private static final int GAUGE_MODE_CURRENT_AGRESSIVE = 3;
-    private static final int GAUGE_MODE_CURRENT_TEST = 2;
-    private static final int GAUGE_MODE_GPS =1;
-    private static final int GAUGE_MODE_ADDOFFSET = 0;
+    private static final int GAUGE_MODE_DEMO = 2;
+    private static final int GAUGE_MODE_CURRENT_AGRESSIVE = 1;
+    private static final int GAUGE_MODE_CURRENT_TEST = 0;
+   // private static final int GAUGE_MODE_GPS =1;
+   // private static final int GAUGE_MODE_ADDOFFSET = 0;
 
     private static final int gSpeed = 1;
     private static final int gBattery = 2;
@@ -89,11 +89,11 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
     }
 
     private void init() {
-        mGaugeMode = GAUGE_MODE_ADDOFFSET;
+        mGaugeMode = GAUGE_MODE_CURRENT_TEST; //GAUGE_MODE_ADDOFFSET;
 
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        this.updateSpeedGPS(null);
+        //this.updateSpeedGPS(null);
 
         mIGaugeUI.setIGauge(this);
         setDisplayMode();
@@ -107,7 +107,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
 
     @Override
     public void onClick() {
-        mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_ADDOFFSET : ++mGaugeMode;
+        mGaugeMode = mGaugeMode == GAUGE_MODE_DEMO ? GAUGE_MODE_CURRENT_TEST : ++mGaugeMode;
         setDisplayMode();
     }
 
@@ -117,13 +117,13 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
         mIGaugeUI.set7SegmentLabelSpeed(mContext.getResources().getString(R.string.m_per_second));
 
         switch (mGaugeMode) {
-            case GAUGE_MODE_ADDOFFSET:
+         /*   case GAUGE_MODE_ADDOFFSET:
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.cinco));
                 break;
 
             case GAUGE_MODE_GPS:
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.gps));
-                break;
+                break;*/
 
             case GAUGE_MODE_CURRENT_TEST:
                 mIGaugeUI.setMajorLabel(mContext.getResources().getString(R.string.current));
@@ -216,13 +216,13 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
 
         switch (mGaugeMode) {
 
-            case GAUGE_MODE_ADDOFFSET:
+       /*     case GAUGE_MODE_ADDOFFSET:
                 addFiveGPSSpeed(mLocation);
                 break;
 
             case GAUGE_MODE_GPS:
                 updateSpeedGPS(mLocation);
-                break;
+                break;*/
 
             case GAUGE_MODE_CURRENT_TEST:
                 updateSpeedGPSandCurrent(mLocation);
@@ -243,9 +243,9 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                 else
                     mDemoSpeedValue = mDemoSpeedValue + (10f / 300f);
 
-                updateGaugeSpeed(mDemoSpeedValue);
+             //   updateGaugeSpeed(mDemoSpeedValue);
 
-                if (!mDemoCurrentDecrement && (nCORRENTE >= MAX_GAUGE_VALUE_CURRENT))
+               /* if (!mDemoCurrentDecrement && (nCORRENTE >= MAX_GAUGE_VALUE_CURRENT))
                     mDemoCurrentDecrement = true;
                 else if (mDemoCurrentDecrement && (nCORRENTE <= MIN_GAUGE_VALUE_CURRENT))
                     mDemoCurrentDecrement = false;
@@ -255,7 +255,32 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
                 else
                     nCORRENTE = nCORRENTE + (100f / 150f);
 
-                updateGaugeCurrent(nCORRENTE);
+               updateGaugeCurrent(nCORRENTE);
+               */
+
+               mSpeedValues[1] = mDemoSpeedValue;
+
+                Log.i("--- speed 1: ", String.valueOf(mSpeedValues[1]));
+                Log.i("--- speed 0: ", String.valueOf(mSpeedValues[0]));
+                Log.i("--- speed diff : ", String.valueOf(mSpeedValues[0] - mSpeedValues[1]));
+                Log.i("-----", "-----");
+
+               if(mSpeedValues[0] < mSpeedValues[1]){
+                    updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+                    updateGaugeCurrent(mSpeedValues[0]*6);
+                    mSpeedValues[0] = mSpeedValues[0] + (10f/300f);
+                } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < .5){
+                    updateGaugeSpeed(mDemoSpeedValue+OFFSET);
+                   updateGaugeCurrent(mDemoSpeedValue*-4);
+                   // updateGaugeCurrent(0);
+                    mSpeedValues[0] = mSpeedValues[1];
+                } else if (mSpeedValues[0] > mSpeedValues[1]){
+                    updateGaugeSpeed(mSpeedValues[0]+OFFSET);
+                    updateGaugeCurrent(mSpeedValues[0]*-4);
+                    mSpeedValues[0] = mSpeedValues[0] - (10f/300f);
+                }
+
+
                 break;
         }
     }
@@ -374,7 +399,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
         if(mSpeedValues[0] < mSpeedValues[1]){
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*20);
-            mSpeedValues[0] = mSpeedValues[0] + (10f/300f);
+            mSpeedValues[0] = mSpeedValues[0] + (40f/300f);
         } else if(Math.abs(mSpeedValues[1] - mSpeedValues[0]) < 1){
             updateGaugeSpeed(Float.parseFloat(strCurrentSpeed)+OFFSET);
             mSpeedValues[0] = mSpeedValues[1];
@@ -382,7 +407,7 @@ public class AccelGauge implements IGauge, IBaseGpsListener {
         } else {
             updateGaugeSpeed(mSpeedValues[0]+OFFSET);
             updateGaugeCurrent(Math.abs(mSpeedValues[1] - mSpeedValues[0])*-14);
-            mSpeedValues[0] = mSpeedValues[0] - (10f/300f);
+            mSpeedValues[0] = mSpeedValues[0] - (40f/300f);
         }
     }
 

@@ -213,11 +213,19 @@ public class MultiColoredScaleGauge extends LinearLayout implements IGaugeUI {
                 if(value < 0) {
                     float angle = (float) ((0.3 * (-value)) + 90); //0.3 para acertar parâmetros para este gauge + 90
 
+                    ((GradientScale_Current_Positive) mImageViewScaleBg_current_pos).setArcAngle(0);
+                    mImageViewScaleBg_current_pos.invalidate();
+                    mImageViewPointer_current.setRotation(0);
+
                     ((GradientScale_Current_Negative) mImageViewScaleBg_current).setArcAngle(angle - 90);
                     mImageViewScaleBg_current.invalidate();
                     mImageViewPointer_current.setRotation(angle);
                 } else {
                     float angle = (float) ((0.3 * (value)) + 90); //0.3 para acertar parâmetros para este gauge + 90
+
+                    ((GradientScale_Current_Negative) mImageViewScaleBg_current).setArcAngle(0);
+                    mImageViewScaleBg_current.invalidate();
+                    mImageViewPointer_current.setRotation(0);
 
                     ((GradientScale_Current_Positive) mImageViewScaleBg_current_pos).setArcAngle(angle - 90);
                     mImageViewScaleBg_current_pos.invalidate();
