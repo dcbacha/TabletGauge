@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Painel</string>
+    <string name="app_name">dPainel</string>
     <string name="action_settings">Settings</string>
     <string name="distance">Distance</string>
     <string name="total">Total</string>
@@ -11,6 +11,8 @@
     <string name="demo">Demo</string>
     <string name="cinco">Gps1 Corrente1</string>
     <string name="gps">Gps2 Corrente2</string>
-    <string name="current">Gps3 Corrente3</string>
-    <string name="agressivo">Gps4 Corrente4</string>
+
+
+    <string name="current">1</string>
+    <string name="agressivo">2</string>
 </resources>
